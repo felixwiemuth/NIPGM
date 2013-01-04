@@ -14,23 +14,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package nipgm.data;
+package nipgm.gui.feedback;
 
-import nipgm.gui.AbstractGUI;
+import nipgm.gui.GUIFeedback;
 
 /**
  *
  * @author Felix Wiemuth
  */
-public class Game {
+public class InfoDialog implements GUIFeedback {
 
-    private AbstractGUI gui;
-    private GameStatus status;
+    private String title;
+    private String message;
 
-    public AbstractGUI getGUI() {
-        return gui;
+    public InfoDialog(String title, String message) {
+        this.title = title;
+        this.message = message;
     }
 
-    public void run() {
+    public String getTitle() {
+        return title;
+    }
+
+    public String getMessage() {
+        return message;
     }
 }

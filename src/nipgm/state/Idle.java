@@ -14,23 +14,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package nipgm.data;
+package nipgm.state;
 
-import nipgm.gui.AbstractGUI;
+import nipgm.data.Game;
 
 /**
  *
  * @author Felix Wiemuth
  */
-public class Game {
+public class Idle extends AbstractState implements IdelInterface {
 
-    private AbstractGUI gui;
-    private GameStatus status;
-
-    public AbstractGUI getGUI() {
-        return gui;
+    public Idle() {
+        super(new ShowQuestion());
     }
 
-    public void run() {
+    @Override
+    public void finish() throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

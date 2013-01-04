@@ -17,6 +17,8 @@
 package nipgm.state;
 
 import nipgm.data.Game;
+import nipgm.gui.GUIFeedback;
+import nipgm.gui.feedback.InfoDialog;
 
 /**
  *
@@ -24,18 +26,30 @@ import nipgm.data.Game;
  */
 public abstract class AbstractState {
 
-    private Game game;
+    private static Game game;
+    private AbstractState nextState;
 
+    public AbstractState(AbstractState nextState) {
+        this.nextState = nextState;
+    }
+
+//    private String title;
+//    private String instructions;
     public void init() {
         game.getGUI().setView(this);
     }
 
-    public abstract void execute();
+//    public abstract void execute();
+    public abstract void finish() throws Exception;
 
-    /**
-     * Get the next state.
-     *
-     * @return null - no next state State - next state
-     */
-    public abstract AbstractState getNextState();
+    public GUIFeedback goToNextState() {
+        try {
+            this.finish();
+            game.getGUI().disableView();
+            nextState.init();
+            return null;
+        } catch (Exception ex) {
+            return new InfoDialog("Error", "Cannot continue: " + ex.getMessage());
+        }
+    }
 }

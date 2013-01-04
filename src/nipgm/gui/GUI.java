@@ -14,23 +14,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package nipgm.data;
+package nipgm.gui;
 
-import nipgm.gui.AbstractGUI;
+import nipgm.state.AbstractState;
+import nipgm.state.ShowQuestion;
 
 /**
  *
  * @author Felix Wiemuth
  */
-public class Game {
+public class GUI implements AbstractGUI {
 
-    private AbstractGUI gui;
-    private GameStatus status;
-
-    public AbstractGUI getGUI() {
-        return gui;
+    @Override
+    public void setView(AbstractState state) {
+        if (state instanceof ShowQuestion) {
+            //TODO set view
+        } else {
+            //TODO error
+        }
     }
 
-    public void run() {
+    @Override
+    public void disableView() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

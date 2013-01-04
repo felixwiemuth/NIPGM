@@ -16,21 +16,13 @@
  */
 package nipgm.data;
 
-import nipgm.gui.AbstractGUI;
+import java.util.List;
 
 /**
  *
  * @author Felix Wiemuth
  */
-public class Game {
+public class GameStatus {
 
-    private AbstractGUI gui;
-    private GameStatus status;
-
-    public AbstractGUI getGUI() {
-        return gui;
-    }
-
-    public void run() {
-    }
+    private List<Task> tasks; //list of all played tasked - the last entry is the current task
 }

@@ -14,23 +14,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package nipgm.data;
-
-import nipgm.gui.AbstractGUI;
+package nipgm.state;
 
 /**
  *
  * @author Felix Wiemuth
  */
-public class Game {
+public interface ShowQuestionInterface {
 
-    private AbstractGUI gui;
-    private GameStatus status;
+    //TODO replace all getTextX methods by one translation object
+    /**
+     * Current question to be displayed for all players to read.
+     *
+     * @return
+     */
+    public String getTextQuestion();
 
-    public AbstractGUI getGUI() {
-        return gui;
-    }
-
-    public void run() {
-    }
+    /**
+     * Button to continue to next step.
+     *
+     * @return
+     */
+    public String getTextButtonNext();
 }

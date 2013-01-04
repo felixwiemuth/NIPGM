@@ -25,4 +25,6 @@ import nipgm.state.AbstractState;
 public interface AbstractGUI {
 
     public void setView(AbstractState state);
+
+    public void disableView();
 }

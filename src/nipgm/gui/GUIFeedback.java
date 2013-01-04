@@ -14,23 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package nipgm.data;
-
-import nipgm.gui.AbstractGUI;
+package nipgm.gui;
 
 /**
  *
  * @author Felix Wiemuth
  */
-public class Game {
-
-    private AbstractGUI gui;
-    private GameStatus status;
-
-    public AbstractGUI getGUI() {
-        return gui;
-    }
-
-    public void run() {
-    }
+public interface GUIFeedback {
 }
