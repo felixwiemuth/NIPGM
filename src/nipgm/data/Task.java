@@ -24,29 +24,41 @@ import java.util.List;
  */
 public class Task {
 
-    private boolean isPreparing = true;
+    public enum Stage {
+
+        PREPARING, VOTING, CREDTIS, FINISHED;
+    }
+    private Texts texts;
+    private Stage stage = Stage.PREPARING;
     private Question question;
     private List<AnswerItem> answers;
     private int correctAnswerIndex;
 
-    public Task(Question question) {
+    public Task(Question question, Texts texts) {
         this.question = question;
     }
 
     public void addAnswer(Answer answer) throws Exception {
-        if (!isPreparing) {
-            throw new Exception("This task is closed. New answers cannot be added anymore.");
+        if (!(stage == Stage.PREPARING)) {
+            throw new Exception(texts.get("error_cannotAddAnswersAnymore"));
         }
         answers.add(new AnswerItem(answer));
     }
 
     public void closeTaskPrepartion() {
-        isPreparing = false;
+        if (stage == Stage.PREPARING) {
+            stage = Stage.VOTING;
+        }
     }
 
+    //TODO voting + close voting
     public void distributeCredits() throws Exception {
-        if (isPreparing) {
-            throw new Exception("Credits cannot be distributed before the task is closed!");
+        if (stage.compareTo(Stage.CREDTIS) < 0) {
+            throw new Exception(texts.get("error_cannotDistributeCreditsBeforeVoting"));
         }
+        if (stage.compareTo(Stage.CREDTIS) > 0) {
+            throw new Exception(texts.get("error_creditsAlreadyDistributed"));
+        }
+        //TODO do distribution
     }
 }

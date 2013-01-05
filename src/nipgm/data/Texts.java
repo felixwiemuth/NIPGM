@@ -16,28 +16,18 @@
  */
 package nipgm.data;
 
-import nipgm.gui.AbstractGUI;
-import nipgm.translations.Translator;
-
 /**
  *
  * @author Felix Wiemuth
  */
-public class Game implements Texts {
+public interface Texts {
 
-    private AbstractGUI gui;
-    private Translator translator;
-    private GameStatus status;
-
-    public AbstractGUI getGUI() {
-        return gui;
-    }
-
-    public void run() {
-    }
-
-    @Override
-    public String get(String key) {
-        return translator.get(key);
-    }
+    /**
+     * Get the text from the currently loaded translation corresponding to
+     * 'key'. If there is no text belonging to 'key', "NULL" is returned.
+     *
+     * @param key
+     * @return
+     */
+    public String get(String key);
 }
