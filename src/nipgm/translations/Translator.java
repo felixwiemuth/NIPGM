@@ -17,19 +17,20 @@
 package nipgm.translations;
 
 import java.io.BufferedReader;
-import static nipgm.util.Util.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import nipgm.data.Texts;
+import static nipgm.util.Util.*;
 
 /**
  * Provide text strings for the application from a selected translation file.
  *
  * @author Felix Wiemuth
  */
-public class Translator {
+public class Translator implements Texts {
 
     private static int COMMENT_BEGIN = '#';
     private static int ASSIGN = '=';
@@ -131,6 +132,7 @@ public class Translator {
      * @param key
      * @return
      */
+    @Override
     public String get(String key) {
         String res = data.get(key);
         if (res == null) {
