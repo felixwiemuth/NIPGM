@@ -14,29 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package nipgm.gui.feedback;
-
-import nipgm.gui.GUIFeedback;
+package nipgm.state;
 
 /**
  *
  * @author Felix Wiemuth
  */
-public class InfoDialog implements GUIFeedback {
-
-    private String title;
-    private String message;
-
-    public InfoDialog(String title, String message) {
-        this.title = title;
-        this.message = message;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getMessage() {
-        return message;
-    }
+public interface IdleInterface {
 }

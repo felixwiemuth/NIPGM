@@ -23,7 +23,7 @@ import nipgm.translations.Translator;
  *
  * @author Felix Wiemuth
  */
-public class Game implements Texts {
+public class Game {
 
     private AbstractGUI gui;
     private Translator translator;
@@ -36,8 +36,7 @@ public class Game implements Texts {
     public void run() {
     }
 
-    @Override
-    public String get(String key) {
+    public String getText(String key) {
         return translator.get(key);
     }
 }

@@ -16,13 +16,11 @@
  */
 package nipgm.state;
 
-import nipgm.data.Game;
-
 /**
  *
  * @author Felix Wiemuth
  */
-public class Idle extends AbstractState implements IdelInterface {
+public class Idle extends AbstractState implements IdleInterface {
 
     public Idle() {
         super(new ShowQuestion());

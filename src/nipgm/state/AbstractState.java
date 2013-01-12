@@ -18,7 +18,7 @@ package nipgm.state;
 
 import nipgm.data.Game;
 import nipgm.gui.GUIFeedback;
-import nipgm.gui.feedback.InfoDialog;
+import nipgm.gui.feedback.Info;
 
 /**
  *
@@ -49,7 +49,7 @@ public abstract class AbstractState {
             nextState.init();
             return null;
         } catch (Exception ex) {
-            return new InfoDialog("Error", "Cannot continue: " + ex.getMessage());
+            return new Info("Error", "Cannot continue: " + ex.getMessage());
         }
     }
 }

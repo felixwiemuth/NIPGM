@@ -14,28 +14,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package nipgm.gui;
+package nipgm.gui.feedback;
 
-import nipgm.state.AbstractState;
-import nipgm.state.ShowQuestion;
+import nipgm.gui.GUIFeedback;
 
 /**
+ * Feedback including (non-ciritical) information, requiring no further
+ * handling. The GUI can (for example) simply show a Dialog.
  *
  * @author Felix Wiemuth
  */
-public class GUI implements AbstractGUI {
+public class Info implements GUIFeedback {
 
-    @Override
-    public void setView(AbstractState state) {
-        if (state instanceof ShowQuestion) {
-            //TODO set view
-        } else {
-            //TODO error
-        }
+    private String title;
+    private String message;
+
+    public Info(String title, String message) {
+        this.title = title;
+        this.message = message;
     }
 
-    @Override
-    public void disableView() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String getTitle() {
+        return title;
+    }
+
+    public String getMessage() {
+        return message;
     }
 }
