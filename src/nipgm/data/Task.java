@@ -16,6 +16,7 @@
  */
 package nipgm.data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,11 +32,12 @@ public class Task {
     private Texts texts;
     private Stage stage = Stage.PREPARING;
     private Question question;
-    private List<AnswerItem> answers;
+    private List<AnswerItem> answers = new ArrayList<>();
     private int correctAnswerIndex;
 
     public Task(Question question, Texts texts) {
         this.question = question;
+        answers.add(new AnswerItem(question.getAnswer()));
     }
 
     public void addAnswer(Answer answer) throws Exception {
@@ -43,6 +45,10 @@ public class Task {
             throw new Exception(texts.get("error_cannotAddAnswersAnymore"));
         }
         answers.add(new AnswerItem(answer));
+    }
+
+    public void mergeAnswers(int index1, int index2) {
+        //TODO implement
     }
 
     public void closeTaskPrepartion() {

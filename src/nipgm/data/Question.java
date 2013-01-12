@@ -24,4 +24,15 @@ public class Question {
 
     private String question;
     private Answer answer;
+    
+    public Question(String question, String answer) {
+        this.question = question;
+        this.answer = new Answer(answer);
+    }
+
+    public Answer getAnswer() {
+        return answer;
+    }
+    
+    
 }

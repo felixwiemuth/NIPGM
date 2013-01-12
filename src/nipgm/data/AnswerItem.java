@@ -16,6 +16,7 @@
  */
 package nipgm.data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,9 +26,37 @@ import java.util.List;
 public class AnswerItem {
 
     private Answer answer;
+    private List<Player> authors = new ArrayList<>(); //TODO correct answer: always empty author list?? (-> merge answers!)
+    private boolean isCorrect;
     List<Player> votes;
 
+    /**
+     * Create a correct answer.
+     *
+     * @param answer
+     */
     public AnswerItem(Answer answer) {
         this.answer = answer;
+        isCorrect = true;
+    }
+
+    /**
+     * Create a players answer.
+     *
+     * @param answer
+     * @param author
+     */
+    public AnswerItem(Answer answer, Player author) {
+        this.answer = answer;
+        isCorrect = false;
+        authors.add(author);
+    }
+
+    public boolean isCorrect() {
+        return isCorrect;
+    }
+
+    public Answer getAnswer() {
+        return answer;
     }
 }

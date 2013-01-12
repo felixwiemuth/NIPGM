@@ -16,22 +16,19 @@
  */
 package nipgm.data;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  *
  * @author Felix Wiemuth
  */
-public class Answer {
+public class TaskBuilder {
 
-    private String answer;
+    private Texts texts;
 
-    public Answer(String answer) {
-        this.answer = answer;
+    public TaskBuilder(Texts texts) {
+        this.texts = texts;
     }
 
-    public String getText() {
-        return answer;
+    public Task createNewTask(Question question) {
+        return new Task(question, texts);
     }
 }
