@@ -16,13 +16,12 @@
  */
 package nipgm.data;
 
-import java.util.List;
-
 /**
+ * This provides various information of the current status of the game / the
+ * program. It is to be used by the UI to get all of the needed information.
+ * Using of the methods will not influence the status.
  *
  * @author Felix Wiemuth
  */
-public class GameStatus implements Status {
-
-    private List<Task> tasks; //list of all played tasked - the last entry is the current task
+public interface Status {
 }
