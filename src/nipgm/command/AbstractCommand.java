@@ -28,17 +28,17 @@ public abstract class AbstractCommand {
 
     public abstract CommandFeedback execute() throws CommandExecuteException;
 
-    public CommandFeedback execute(FeedbackHandler exceptionHandler) {
+    public CommandFeedback execute(ExceptionHandler exceptionHandler) {
         try {
             return execute();
         } catch (CommandExecuteException ex) {
             CommandFeedback feedback = new CommandFeedback(ex);
-            exceptionHandler.handleFeedback(feedback);
+            exceptionHandler.handleException(ex);
             return feedback;
         }
     }
 
-    public CommandFeedback execute(FeedbackHandler exceptionHandler, FeedbackHandler resultHandler) {
+    public CommandFeedback execute(ExceptionHandler exceptionHandler, FeedbackHandler resultHandler) {
         CommandFeedback result = execute(exceptionHandler);
         resultHandler.handleFeedback(result);
         return result;

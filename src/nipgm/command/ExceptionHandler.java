@@ -20,26 +20,7 @@ package nipgm.command;
  *
  * @author Felix Wiemuth
  */
-public class CommandFeedback {
+public interface ExceptionHandler {
 
-    private String title;
-    private String message;
-
-    public CommandFeedback(String title, String message) {
-        this.title = title;
-        this.message = message;
-    }
-
-    public CommandFeedback(CommandExecuteException ex) {
-        title = ex.getClass().getName();
-        message = ex.getMessage();
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getMessage() {
-        return message;
-    }
+    public void handleException(CommandExecuteException ex);
 }
