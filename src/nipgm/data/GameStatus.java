@@ -24,5 +24,13 @@ import java.util.List;
  */
 public class GameStatus implements Status {
 
+    public enum State {
+
+        IDLE;
+    }
     private List<Task> tasks; //list of all played tasked - the last entry is the current task
+
+    public Task getCurrentTask() {
+        return tasks.get(tasks.size());
+    }
 }

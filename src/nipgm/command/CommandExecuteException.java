@@ -14,11 +14,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package nipgm.gui;
+package nipgm.command;
 
 /**
  *
  * @author Felix Wiemuth
  */
-public interface GUIFeedback {
+public class CommandExecuteException extends Exception {
+
+    public CommandExecuteException() {
+    }
+
+    public CommandExecuteException(String message) {
+        super(message);
+    }
 }

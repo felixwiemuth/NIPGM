@@ -16,7 +16,6 @@
  */
 package nipgm.data;
 
-import nipgm.gui.AbstractGUI;
 import nipgm.translations.Translator;
 
 /**
@@ -25,18 +24,17 @@ import nipgm.translations.Translator;
  */
 public class Game {
 
-    private AbstractGUI gui;
     private Translator translator;
     private GameStatus status;
-
-    public AbstractGUI getGUI() {
-        return gui;
-    }
 
     public void run() {
     }
 
     public String getText(String key) {
         return translator.get(key);
+    }
+
+    public GameStatus getStatus() {
+        return status;
     }
 }

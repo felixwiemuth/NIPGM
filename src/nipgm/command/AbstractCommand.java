@@ -16,11 +16,15 @@
  */
 package nipgm.command;
 
+import nipgm.data.GameStatus.State;
+
 /**
  *
  * @author Felix Wiemuth
  */
 public abstract class AbstractCommand {
+
+    private static State state;
 
     public abstract CommandFeedback execute() throws CommandExecuteException;
 
@@ -38,5 +42,18 @@ public abstract class AbstractCommand {
         CommandFeedback result = execute(exceptionHandler);
         resultHandler.handleFeedback(result);
         return result;
+    }
+
+    /**
+     * Get the current state of the game.
+     *
+     * @return
+     */
+    protected State state() {
+        return state;
+    }
+
+    public void setState(State state) {
+        AbstractCommand.state = state;
     }
 }
