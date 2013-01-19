@@ -16,6 +16,7 @@
  */
 package nipgm.command;
 
+import nipgm.data.Game;
 import nipgm.data.GameStatus.State;
 
 /**
@@ -24,14 +25,20 @@ import nipgm.data.GameStatus.State;
  */
 public abstract class AbstractCommand {
 
-    private static State state;
-
-    public abstract CommandFeedback execute() throws CommandExecuteException;
+    public CommandFeedback execute() throws CommandExecuteException {
+        try {
+            return exec();
+        } catch (CommandExecuteException ex) {
+            //TODO log exception
+            throw ex;
+        }
+    }
 
     public CommandFeedback execute(ExceptionHandler exceptionHandler) {
         try {
             return execute();
         } catch (CommandExecuteException ex) {
+            //TODO log exception
             CommandFeedback feedback = new CommandFeedback(ex);
             exceptionHandler.handleException(ex);
             return feedback;
@@ -39,10 +46,13 @@ public abstract class AbstractCommand {
     }
 
     public CommandFeedback execute(ExceptionHandler exceptionHandler, FeedbackHandler resultHandler) {
+        //TODO log exception
         CommandFeedback result = execute(exceptionHandler);
         resultHandler.handleFeedback(result);
         return result;
     }
+
+    protected abstract CommandFeedback exec() throws CommandExecuteException;
 
     /**
      * Get the current state of the game.
@@ -50,10 +60,6 @@ public abstract class AbstractCommand {
      * @return
      */
     protected State state() {
-        return state;
-    }
-
-    public void setState(State state) {
-        AbstractCommand.state = state;
+        return Game.getInstance().getStatus().getState();
     }
 }

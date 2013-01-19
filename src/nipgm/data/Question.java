@@ -24,7 +24,7 @@ public class Question {
 
     private String question;
     private Answer answer;
-    
+
     public Question(String question, String answer) {
         this.question = question;
         this.answer = new Answer(answer);
@@ -33,6 +33,8 @@ public class Question {
     public Answer getAnswer() {
         return answer;
     }
-    
-    
+
+    public String getText() {
+        return question;
+    }
 }

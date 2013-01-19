@@ -28,9 +28,14 @@ public class GameStatus implements Status {
 
         IDLE;
     }
+    private State state = State.IDLE;
     private List<Task> tasks; //list of all played tasked - the last entry is the current task
 
     public Task getCurrentTask() {
         return tasks.get(tasks.size());
+    }
+    
+    public State getState() {
+        return state;
     }
 }

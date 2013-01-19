@@ -40,6 +40,10 @@ public class Task {
         answers.add(new AnswerItem(question.getAnswer()));
     }
 
+    public Question getQuestion() {
+        return question;
+    }
+
     public void addAnswer(Answer answer) throws Exception {
         if (!(stage == Stage.PREPARING)) {
             throw new Exception(texts.get("error_cannotAddAnswersAnymore"));
