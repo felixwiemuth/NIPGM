@@ -18,6 +18,7 @@ package nipgm.data.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import nipgm.control.Game;
 import nipgm.data.Answer;
 import nipgm.data.AnswerItem;
 import nipgm.data.Question;
@@ -33,7 +34,7 @@ public class Task {
 
         PREPARING, VOTING, CREDTIS, FINISHED;
     }
-    private Texts texts;
+    //private Texts texts = Game.getInstance().
     private Stage stage = Stage.PREPARING;
     private Question question;
     private List<AnswerItem> answers = new ArrayList<>();
@@ -50,7 +51,7 @@ public class Task {
 
     public void addAnswer(Answer answer) throws Exception {
         if (!(stage == Stage.PREPARING)) {
-            throw new Exception(texts.get("error_cannotAddAnswersAnymore"));
+            throw new Exception(Game.getText("error_cannotAddAnswersAnymore"));
         }
         answers.add(new AnswerItem(answer));
     }
@@ -68,10 +69,10 @@ public class Task {
     //TODO voting + close voting
     public void distributeCredits() throws Exception {
         if (stage.compareTo(Stage.CREDTIS) < 0) {
-            throw new Exception(texts.get("error_cannotDistributeCreditsBeforeVoting"));
+            throw new Exception(Game.getText("error_cannotDistributeCreditsBeforeVoting"));
         }
         if (stage.compareTo(Stage.CREDTIS) > 0) {
-            throw new Exception(texts.get("error_creditsAlreadyDistributed"));
+            throw new Exception(Game.getText("error_creditsAlreadyDistributed"));
         }
         //TODO do distribution
     }

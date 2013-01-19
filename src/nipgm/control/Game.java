@@ -16,6 +16,7 @@
  */
 package nipgm.control;
 
+import java.io.File;
 import nipgm.data.impl.GameStatus;
 import nipgm.translations.Translator;
 
@@ -26,8 +27,12 @@ import nipgm.translations.Translator;
 public class Game {
 
     private static Game instance = new Game();
+    private static File jarDirectory = new File(Game.class.getProtectionDomain().getCodeSource().getLocation().getPath());
 
     private Game() {
+        translator = new Translator(new File(jarDirectory, "translations"));
+        //TODO load translation from prereferences
+        translator.loadTranslation(new File("en")); //load standard translation
     }
 
     public static Game getInstance() {
@@ -39,8 +44,8 @@ public class Game {
     public void run() {
     }
 
-    public String getText(String key) {
-        return translator.get(key);
+    public static String getText(String key) {
+        return instance.translator.get(key);
     }
 
     public GameStatus getStatus() {
