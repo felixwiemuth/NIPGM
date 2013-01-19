@@ -14,36 +14,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package nipgm.data;
+package nipgm.data.impl;
 
-import nipgm.translations.Translator;
+import java.util.List;
+import nipgm.data.Status;
 
 /**
  *
  * @author Felix Wiemuth
  */
-public class Game {
+public class GameStatus implements Status {
 
-    private static Game instance = new Game();
+    public enum State {
 
-    private Game() {
+        IDLE;
+    }
+    private State state = State.IDLE;
+    private List<Task> tasks; //list of all played tasked - the last entry is the current task
+
+    public Task getCurrentTask() {
+        return tasks.get(tasks.size());
     }
 
-    public static Game getInstance() {
-        return instance;
-    }
-
-    private Translator translator;
-    private GameStatus status;
-
-    public void run() {
-    }
-
-    public String getText(String key) {
-        return translator.get(key);
-    }
-
-    public GameStatus getStatus() {
-        return status;
+    public State getState() {
+        return state;
     }
 }

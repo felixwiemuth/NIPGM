@@ -16,8 +16,8 @@
  */
 package nipgm.command;
 
-import nipgm.data.Game;
-import nipgm.data.GameStatus.State;
+import nipgm.control.Game;
+import nipgm.data.impl.GameStatus.State;
 
 /**
  *

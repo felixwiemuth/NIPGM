@@ -16,6 +16,9 @@
  */
 package nipgm.data;
 
+import nipgm.data.impl.Task;
+import nipgm.translations.Texts;
+
 /**
  *
  * @author Felix Wiemuth

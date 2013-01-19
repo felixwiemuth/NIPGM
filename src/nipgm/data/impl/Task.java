@@ -14,10 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package nipgm.data;
+package nipgm.data.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import nipgm.data.Answer;
+import nipgm.data.AnswerItem;
+import nipgm.data.Question;
+import nipgm.translations.Texts;
 
 /**
  *

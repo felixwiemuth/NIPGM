@@ -20,13 +20,5 @@ package nipgm.data;
  *
  * @author Felix Wiemuth
  */
-public class Player {
-
-    private String name;
-    private int credits = 0;
-    private int creditsPending = 0;
-
-    public Player(String name) {
-        this.name = name;
-    }
+public interface Player {
 }

@@ -14,28 +14,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package nipgm.data;
-
-import java.util.List;
+package nipgm.translations;
 
 /**
  *
  * @author Felix Wiemuth
  */
-public class GameStatus implements Status {
+public interface Texts {
 
-    public enum State {
-
-        IDLE;
-    }
-    private State state = State.IDLE;
-    private List<Task> tasks; //list of all played tasked - the last entry is the current task
-
-    public Task getCurrentTask() {
-        return tasks.get(tasks.size());
-    }
-    
-    public State getState() {
-        return state;
-    }
+    /**
+     * Get the text from the currently loaded translation corresponding to
+     * 'key'. If there is no text belonging to 'key', "NULL" is returned.
+     *
+     * @param key
+     * @return
+     */
+    public String get(String key);
 }

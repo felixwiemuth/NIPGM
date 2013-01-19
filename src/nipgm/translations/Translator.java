@@ -22,7 +22,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import nipgm.data.Texts;
 import static nipgm.util.Util.*;
 
 /**

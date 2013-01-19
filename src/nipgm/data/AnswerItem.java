@@ -18,6 +18,7 @@ package nipgm.data;
 
 import java.util.ArrayList;
 import java.util.List;
+import nipgm.data.impl.GamePlayer;
 
 /**
  *
@@ -26,9 +27,9 @@ import java.util.List;
 public class AnswerItem {
 
     private Answer answer;
-    private List<Player> authors = new ArrayList<>(); //TODO correct answer: always empty author list?? (-> merge answers!)
+    private List<GamePlayer> authors = new ArrayList<>(); //TODO correct answer: always empty author list?? (-> merge answers!)
     private boolean isCorrect;
-    List<Player> votes;
+    List<GamePlayer> votes;
 
     /**
      * Create a correct answer.
@@ -46,7 +47,7 @@ public class AnswerItem {
      * @param answer
      * @param author
      */
-    public AnswerItem(Answer answer, Player author) {
+    public AnswerItem(Answer answer, GamePlayer author) {
         this.answer = answer;
         isCorrect = false;
         authors.add(author);

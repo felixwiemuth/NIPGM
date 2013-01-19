@@ -14,21 +14,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package nipgm.data;
+package nipgm.control;
+
+import nipgm.data.impl.GameStatus;
+import nipgm.translations.Translator;
 
 /**
  *
  * @author Felix Wiemuth
  */
-public class Answer {
+public class Game {
 
-    private String answer;
+    private static Game instance = new Game();
 
-    public Answer(String answer) {
-        this.answer = answer;
+    private Game() {
     }
 
-    public String getText() {
-        return answer;
+    public static Game getInstance() {
+        return instance;
+    }
+    private Translator translator;
+    private GameStatus status;
+
+    public void run() {
+    }
+
+    public String getText(String key) {
+        return translator.get(key);
+    }
+
+    public GameStatus getStatus() {
+        return status;
     }
 }

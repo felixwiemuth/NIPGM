@@ -14,20 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package nipgm.data;
+package nipgm.data.impl;
+
+import nipgm.data.Player;
 
 /**
  *
  * @author Felix Wiemuth
  */
-public interface Texts {
+public class GamePlayer implements Player {
 
-    /**
-     * Get the text from the currently loaded translation corresponding to
-     * 'key'. If there is no text belonging to 'key', "NULL" is returned.
-     *
-     * @param key
-     * @return
-     */
-    public String get(String key);
+    private String name;
+    private int credits = 0;
+    private int creditsPending = 0;
+
+    public GamePlayer(String name) {
+        this.name = name;
+    }
 }
