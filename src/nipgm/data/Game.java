@@ -24,6 +24,15 @@ import nipgm.translations.Translator;
  */
 public class Game {
 
+    private static Game instance = new Game();
+
+    private Game() {
+    }
+
+    public static Game getInstance() {
+        return instance;
+    }
+
     private Translator translator;
     private GameStatus status;
 
