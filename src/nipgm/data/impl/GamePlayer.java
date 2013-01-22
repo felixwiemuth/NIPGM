@@ -26,9 +26,27 @@ public class GamePlayer implements Player {
 
     private String name;
     private int credits = 0;
-    private int creditsPending = 0;
 
     public GamePlayer(String name) {
         this.name = name;
+    }
+
+    /**
+     * Add credits to the players account.
+     *
+     * @param credits Amount of credits to add.
+     */
+    public void addCredits(int credits) {
+        this.credits += credits;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public int getCredits() {
+        return credits;
     }
 }

@@ -17,14 +17,17 @@
 package nipgm.data.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import nipgm.control.Game;
 import nipgm.data.Answer;
 import nipgm.data.AnswerItem;
 import nipgm.data.Question;
-import nipgm.translations.Texts;
 
 /**
+ * A 'Task' represents the data used for one round. This includes question,
+ * players, answers etc.
  *
  * @author Felix Wiemuth
  */
@@ -34,26 +37,80 @@ public class Task {
 
         PREPARING, VOTING, CREDTIS, FINISHED;
     }
-    //private Texts texts = Game.getInstance().
+
+    /**
+     * Describes the status of a player regarding the current round.
+     */
+    private class PlayerStatus {
+
+        private GamePlayer player;
+        private boolean submittedAnswer = false;
+        private boolean hasVoted = false;
+        private int creditsEarned = 0; //credits earned until now in this round
+
+        public PlayerStatus(GamePlayer player) {
+            this.player = player;
+        }
+
+        public void submitAnswer(AnswerItem answerItem) throws Exception {
+            if (submittedAnswer) {
+                throw new Exception(Game.getText("ex_cannotAddAnswerAlreadySubmitted"));
+            }
+            answers.add(answerItem);
+            submittedAnswer = true;
+        }
+
+        public void vote(int answerIndex) throws Exception {
+            if (hasVoted) {
+                throw new Exception(Game.getText("ex_alreadyVoted"));
+            }
+            try {
+                answers.get(answerIndex).addVote(player);
+                hasVoted = true;
+            } catch (IndexOutOfBoundsException ex) {
+                throw new Exception(Game.getText("ex_answerNumberNotExists"));
+            }
+        }
+
+        public void addCredits(int credits) {
+            creditsEarned += credits;
+        }
+
+        public int getCreditsEarned() {
+            return creditsEarned;
+        }
+
+        public void addCreditsToAccount() {
+            player.addCredits(creditsEarned);
+        }
+    }
     private Stage stage = Stage.PREPARING;
     private Question question;
     private List<AnswerItem> answers = new ArrayList<>();
     private int correctAnswerIndex;
+    private Map<GamePlayer, PlayerStatus> playerStatus = new HashMap<>(); //TODO initialize
 
-    public Task(Question question, Texts texts) {
+    public Task(Question question, List<GamePlayer> players) {
         this.question = question;
         answers.add(new AnswerItem(question.getAnswer()));
+        for (GamePlayer player : players) {
+            playerStatus.put(player, new PlayerStatus(player));
+        }
     }
 
     public Question getQuestion() {
         return question;
     }
 
-    public void addAnswer(Answer answer) throws Exception {
+    public void addAnswer(Answer answer, GamePlayer player) throws Exception {
         if (!(stage == Stage.PREPARING)) {
-            throw new Exception(Game.getText("error_cannotAddAnswersAnymore"));
+            throw new Exception(Game.getText("ex_cannotAddAnswersAnymore"));
         }
-        answers.add(new AnswerItem(answer));
+        playerStatus.get(player).submitAnswer(new AnswerItem(answer, player));
+    }
+
+    public void addVote(int answerIndex, GamePlayer player) throws Exception {
+        playerStatus.get(player).vote(answerIndex);
     }
 
     public void mergeAnswers(int index1, int index2) {
@@ -69,11 +126,17 @@ public class Task {
     //TODO voting + close voting
     public void distributeCredits() throws Exception {
         if (stage.compareTo(Stage.CREDTIS) < 0) {
-            throw new Exception(Game.getText("error_cannotDistributeCreditsBeforeVoting"));
+            throw new Exception(Game.getText("ex_cannotDistributeCreditsBeforeVoting"));
         }
         if (stage.compareTo(Stage.CREDTIS) > 0) {
-            throw new Exception(Game.getText("error_creditsAlreadyDistributed"));
+            throw new Exception(Game.getText("ex_creditsAlreadyDistributed"));
         }
-        //TODO do distribution
+        calculateCredits();
+        for (PlayerStatus p : playerStatus.values()) {
+            p.addCreditsToAccount();
+        }
+    }
+
+    private void calculateCredits() {
     }
 }

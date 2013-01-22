@@ -21,4 +21,16 @@ package nipgm.data;
  * @author Felix Wiemuth
  */
 public interface Player {
+
+    public String getName();
+
+    public int getCredits();
+//    /**
+//     * Credits player collected during the current round.
+//     * To get the credits earned in the whole round, call at the end
+//     * of a round.
+//     * //TODO 
+//     * @return
+//     */
+//    public int getCreditsPending();
 }

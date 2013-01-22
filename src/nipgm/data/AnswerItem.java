@@ -17,7 +17,9 @@
 package nipgm.data;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import nipgm.data.impl.GamePlayer;
 
 /**
@@ -29,7 +31,7 @@ public class AnswerItem {
     private Answer answer;
     private List<GamePlayer> authors = new ArrayList<>(); //TODO correct answer: always empty author list?? (-> merge answers!)
     private boolean isCorrect;
-    List<GamePlayer> votes;
+    Set<GamePlayer> votes = new HashSet<>();
 
     /**
      * Create a correct answer.
@@ -59,5 +61,13 @@ public class AnswerItem {
 
     public Answer getAnswer() {
         return answer;
+    }
+
+    public void addVote(GamePlayer player) {
+        votes.add(player);
+    }
+
+    public int getVoteCount() {
+        return votes.size();
     }
 }
