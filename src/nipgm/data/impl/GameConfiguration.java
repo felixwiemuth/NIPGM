@@ -14,35 +14,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package nipgm.data;
+package nipgm.data.impl;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * A representation of one question of the game. It consists of the actual
- * question, a question type (arbitrary String) and the correct answer.
+ * Includes everything configurable.
  *
  * @author Felix Wiemuth
  */
-public class Question {
+public class GameConfiguration {
 
-    private String question;
-    private String type;
-    private Answer answer;
+    public enum AwardType {
 
-    public Question(String question, String type, String answer) {
-        this.question = question;
-        this.type = type;
-        this.answer = new Answer(answer);
+        VOTED_CORRECT_ANSWER,
+        GOT_PLAYERS_VOTE;
     }
+    private Map<AwardType, Integer> baseCredits = new HashMap<>();
+    private Map<String, Integer> questionTypeFactor = new HashMap<>();
 
-    public Answer getAnswer() {
-        return answer;
-    }
-
-    public String getText() {
-        return question;
-    }
-
-    public String getType() {
-        return type;
+    public int getCreditAmount(AwardType awardType, String questionType) {
+        return baseCredits.get(awardType) * questionTypeFactor.get(questionType);
     }
 }

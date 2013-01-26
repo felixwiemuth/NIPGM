@@ -63,11 +63,19 @@ public class AnswerItem {
         return answer;
     }
 
+    public List<GamePlayer> getAuthors() {
+        return authors;
+    }
+
     public void addVote(GamePlayer player) {
         votes.add(player);
     }
 
     public int getVoteCount() {
         return votes.size();
+    }
+
+    public Set<GamePlayer> getVotes() {
+        return votes;
     }
 }

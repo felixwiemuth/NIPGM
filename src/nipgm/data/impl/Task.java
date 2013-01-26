@@ -87,7 +87,6 @@ public class Task {
     private Stage stage = Stage.PREPARING;
     private Question question;
     private List<AnswerItem> answers = new ArrayList<>();
-    private int correctAnswerIndex;
     private Map<GamePlayer, PlayerStatus> playerStatus = new HashMap<>(); //TODO initialize
 
     public Task(Question question, List<GamePlayer> players) {
@@ -138,5 +137,19 @@ public class Task {
     }
 
     private void calculateCredits() {
+        for (AnswerItem answer : answers) {
+            //calculate credits for players who got votes from other players
+            int credits = answer.getVoteCount()
+                    * Game.getConfig().getCreditAmount(GameConfiguration.AwardType.GOT_PLAYERS_VOTE, question.getType());
+            for (GamePlayer author : answer.getAuthors()) {
+                playerStatus.get(author).addCredits(credits);
+            }
+            //calculate credits for players who voted the correct answer
+            if (answer.isCorrect()) {
+                for (GamePlayer player : answer.getVotes()) {
+                    playerStatus.get(player).addCredits(Game.getConfig().getCreditAmount(GameConfiguration.AwardType.VOTED_CORRECT_ANSWER, question.getType()));
+                }
+            }
+        }
     }
 }
