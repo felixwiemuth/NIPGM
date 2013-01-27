@@ -75,6 +75,7 @@ public class Translator implements Texts {
             return;
         }
         String line;
+        int lineCount = 0;
         while (true) {
             try {
                 line = reader.readLine();
@@ -82,10 +83,11 @@ public class Translator implements Texts {
                 err("I/O error: " + e.getMessage());
                 break;
             }
+            lineCount++;
             if (line == null) {
                 break;
             }
-            addItem(line);
+            addItem(line, lineCount);
         }
         try {
             reader.close();
@@ -94,7 +96,7 @@ public class Translator implements Texts {
         }
     }
 
-    private void addItem(String raw) {
+    private void addItem(String raw, int lineNumber) {
         String line; //line without comment
         try {
             line = raw.substring(0, raw.indexOf(COMMENT_BEGIN));
@@ -111,7 +113,7 @@ public class Translator implements Texts {
             key = line.substring(0, pos);
             value = line.substring(pos + 1);
         } catch (IndexOutOfBoundsException ex) {
-            warn("Skipping incorrect line in translation file");
+            warn("Skipping incorrect line " + lineNumber + " in translation file");
             return;
         }
         try {
