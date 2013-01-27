@@ -16,16 +16,53 @@
  */
 package nipgm.command;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import nipgm.control.Game;
 import nipgm.data.impl.GameStatus.State;
 
 /**
+ * Base class for commands from the user to the game. Subclasses define concrete
+ * commands. Every subclass should define the command state permissions in a
+ * static part using 'putStatePermissions(Class commandClass, StatePermissions
+ * p)'.
  *
  * @author Felix Wiemuth
  */
 public abstract class AbstractCommand {
 
+    /**
+     * Contains the states in which the command is allowed to be executed and
+     * optional special exceptions to be thrown in special disallowed states.
+     */
+    protected static class StatePermissions {
+
+        private final Set<State> allowedStates = new HashSet<>();
+        private final Map<State, CommandExecuteException> disallowedStateExceptions = new HashMap<>();
+
+        public StatePermissions(State... allowedStates) {
+            this.allowedStates.addAll(Arrays.asList(allowedStates));
+        }
+
+        public void putDisallowedStateException(State state, CommandExecuteException ex) {
+            disallowedStateExceptions.put(state, ex);
+        }
+    }
+    protected final static Map<Class, StatePermissions> statePermissions = new HashMap<>();
+
     public CommandFeedback execute() throws CommandExecuteException {
+        StatePermissions p = statePermissions.get(this.getClass());
+        if (!p.allowedStates.contains(Game.getStatus().getState())) {
+            CommandExecuteException ex = p.disallowedStateExceptions.get(Game.getStatus().getState());
+            if (ex == null) {
+                //TODO name current state, allowed states
+                ex = new CommandExecuteException(Game.getText("ex_CommandNotAllowedInCurrentState"));
+            }
+            throw ex;
+        }
         try {
             return exec();
         } catch (CommandExecuteException ex) {
@@ -54,12 +91,7 @@ public abstract class AbstractCommand {
 
     protected abstract CommandFeedback exec() throws CommandExecuteException;
 
-    /**
-     * Get the current state of the game.
-     *
-     * @return
-     */
-    protected State state() {
-        return Game.getInstance().getStatus().getState();
+    protected static void putStatePermissions(Class commandClass, StatePermissions p) {
+        statePermissions.put(commandClass, p);
     }
 }

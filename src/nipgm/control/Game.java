@@ -54,7 +54,7 @@ public class Game {
         return instance.config;
     }
 
-    public GameStatus getStatus() {
-        return status;
+    public static GameStatus getStatus() {
+        return instance.status;
     }
 }
