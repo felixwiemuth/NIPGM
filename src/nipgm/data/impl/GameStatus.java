@@ -16,7 +16,9 @@
  */
 package nipgm.data.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+import nipgm.control.Game;
 import nipgm.data.Status;
 
 /**
@@ -30,7 +32,8 @@ public class GameStatus implements Status {
         IDLE;
     }
     private State state = State.IDLE;
-    private List<Task> tasks; //list of all played tasked - the last entry is the current task
+    private List<GamePlayer> players = new ArrayList<>(); //all registered players (not necessary those playing the current task)
+    private List<Task> tasks = new ArrayList<>(); //list of all played tasked - the last entry is the current task
 
     public Task getCurrentTask() {
         return tasks.get(tasks.size());
@@ -38,5 +41,17 @@ public class GameStatus implements Status {
 
     public State getState() {
         return state;
+    }
+
+    public String getStateName(State state) {
+        return Game.getText("stateName_" + state.toString());
+    }
+
+    public String getStateName() {
+        return getStateName(state);
+    }
+
+    public void addPlayer(GamePlayer player) {
+        players.add(player);
     }
 }

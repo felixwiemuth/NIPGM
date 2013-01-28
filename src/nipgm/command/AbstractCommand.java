@@ -58,8 +58,17 @@ public abstract class AbstractCommand {
         if (!p.allowedStates.contains(Game.getStatus().getState())) {
             CommandExecuteException ex = p.disallowedStateExceptions.get(Game.getStatus().getState());
             if (ex == null) {
-                //TODO name current state, allowed states
-                ex = new CommandExecuteException(Game.getText("ex_CommandNotAllowedInCurrentState"));
+                //TODO log exception
+                StringBuilder sb = new StringBuilder(Game.getText("ex_CommandNotAllowedInCurrentState$1"));
+                sb.append(Game.getStatus().getStateName());
+                sb.append(Game.getText("ex_CommandNotAllowedInCurrentState$2"));
+                sb.append(" ");
+                for (State state : p.allowedStates) {
+                    sb.append("'");
+                    sb.append(Game.getStatus().getStateName(state));
+                    sb.append("', ");
+                }
+                ex = new CommandExecuteException(sb.substring(0, sb.length() - 2));
             }
             throw ex;
         }
