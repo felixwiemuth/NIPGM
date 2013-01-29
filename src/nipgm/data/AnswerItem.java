@@ -16,66 +16,22 @@
  */
 package nipgm.data;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import nipgm.data.impl.GamePlayer;
 
 /**
  *
  * @author Felix Wiemuth
  */
-public class AnswerItem {
+public interface AnswerItem {
 
-    private Answer answer;
-    private List<GamePlayer> authors = new ArrayList<>(); //TODO correct answer: always empty author list?? (-> merge answers!)
-    private boolean isCorrect;
-    Set<GamePlayer> votes = new HashSet<>();
+    public Answer getAnswer();
 
-    /**
-     * Create a correct answer.
-     *
-     * @param answer
-     */
-    public AnswerItem(Answer answer) {
-        this.answer = answer;
-        isCorrect = true;
-    }
+    public List<? extends Player> getAuthors();
 
-    /**
-     * Create a players answer.
-     *
-     * @param answer
-     * @param author
-     */
-    public AnswerItem(Answer answer, GamePlayer author) {
-        this.answer = answer;
-        isCorrect = false;
-        authors.add(author);
-    }
+    public int getVoteCount();
 
-    public boolean isCorrect() {
-        return isCorrect;
-    }
+    public Set<? extends Player> getVotes();
 
-    public Answer getAnswer() {
-        return answer;
-    }
-
-    public List<GamePlayer> getAuthors() {
-        return authors;
-    }
-
-    public void addVote(GamePlayer player) {
-        votes.add(player);
-    }
-
-    public int getVoteCount() {
-        return votes.size();
-    }
-
-    public Set<GamePlayer> getVotes() {
-        return votes;
-    }
+    public boolean isCorrect();
 }

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import nipgm.control.Game;
 import nipgm.data.Status;
+import nipgm.data.Task;
 
 /**
  *
@@ -29,18 +30,34 @@ public class GameStatus implements Status {
 
     public enum State {
 
-        IDLE;
+        IDLE,
+        SHOW_QUESTION,
+        ENTER_ANSWERS,
+        SHOW_ANSWERS,
+        ENTER_VOTES,
+        SHOW_RESULTS;
     }
     private State state = State.IDLE;
     private List<GamePlayer> players = new ArrayList<>(); //all registered players (not necessary those playing the current task)
-    private List<Task> tasks = new ArrayList<>(); //list of all played tasked - the last entry is the current task
+    private List<GameTask> tasks = new ArrayList<>(); //list of all played tasked - the last entry is the current task
 
-    public Task getCurrentTask() {
+    @Override
+    public GameTask getCurrentTask() {
         return tasks.get(tasks.size());
+    }
+
+    @Override
+    public List<? extends Task> getTasks() {
+        //TODO implement
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public State getState() {
         return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
     }
 
     public String getStateName(State state) {

@@ -22,16 +22,16 @@ import java.util.List;
 import java.util.Map;
 import nipgm.control.Game;
 import nipgm.data.Answer;
-import nipgm.data.AnswerItem;
 import nipgm.data.Question;
+import nipgm.data.Task;
 
 /**
- * A 'Task' represents the data used for one round. This includes question,
+ * A 'GameTask' represents the data used for one round. This includes question,
  * players, answers etc.
  *
  * @author Felix Wiemuth
  */
-public class Task {
+public class GameTask implements Task {
 
     public enum Stage {
 
@@ -52,7 +52,7 @@ public class Task {
             this.player = player;
         }
 
-        public void submitAnswer(AnswerItem answerItem) throws Exception {
+        public void submitAnswer(GameAnswerItem answerItem) throws Exception {
             if (submittedAnswer) {
                 throw new Exception(Game.getText("ex_cannotAddAnswerAlreadySubmitted"));
             }
@@ -86,17 +86,18 @@ public class Task {
     }
     private Stage stage = Stage.PREPARING;
     private Question question;
-    private List<AnswerItem> answers = new ArrayList<>();
+    private List<GameAnswerItem> answers = new ArrayList<>();
     private Map<GamePlayer, PlayerStatus> playerStatus = new HashMap<>(); //TODO initialize
 
-    public Task(Question question, List<GamePlayer> players) {
+    public GameTask(Question question, List<GamePlayer> players) {
         this.question = question;
-        answers.add(new AnswerItem(question.getAnswer()));
+        answers.add(new GameAnswerItem(question.getAnswer()));
         for (GamePlayer player : players) {
             playerStatus.put(player, new PlayerStatus(player));
         }
     }
 
+    @Override
     public Question getQuestion() {
         return question;
     }
@@ -105,7 +106,7 @@ public class Task {
         if (!(stage == Stage.PREPARING)) {
             throw new Exception(Game.getText("ex_cannotAddAnswersAnymore"));
         }
-        playerStatus.get(player).submitAnswer(new AnswerItem(answer, player));
+        playerStatus.get(player).submitAnswer(new GameAnswerItem(answer, player));
     }
 
     public void addVote(int answerIndex, GamePlayer player) throws Exception {
@@ -137,7 +138,7 @@ public class Task {
     }
 
     private void calculateCredits() {
-        for (AnswerItem answer : answers) {
+        for (GameAnswerItem answer : answers) {
             //calculate credits for players who got votes from other players
             int credits = answer.getVoteCount()
                     * Game.getConfig().getCreditAmount(GameConfiguration.AwardType.GOT_PLAYERS_VOTE, question.getType());
