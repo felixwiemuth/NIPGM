@@ -42,19 +42,19 @@ public abstract class AbstractCommand {
      * preconditions that have to be met to allow the execution.
      */
     protected static class CommandPermissions {
-
+        
         private final Set<State> allowedStates = new HashSet<>();
         private final Map<State, CommandStateException> disallowedStateExceptions = new HashMap<>();
         private final List<CommandPrecondition> preconditions = new LinkedList<>();
-
+        
         public CommandPermissions(State... allowedStates) {
             this.allowedStates.addAll(Arrays.asList(allowedStates));
         }
-
+        
         public void putDisallowedStateException(State state, CommandStateException ex) {
             disallowedStateExceptions.put(state, ex);
         }
-
+        
         public void addPrecondition(CommandPrecondition precondition) {
             preconditions.add(precondition);
         }
@@ -64,7 +64,8 @@ public abstract class AbstractCommand {
     /**
      * Execute the command.
      *
-     * @return Information on the successful execution of the command.
+     * @return Information on the successful execution of the command. If no
+     * information is provided, 'null' is returned.
      * @throws CommandExecuteException - if something during the execution went
      * wrong
      * @throws CommandStateException - if the game is currently in a state not
@@ -83,7 +84,7 @@ public abstract class AbstractCommand {
             throw ex;
         }
     }
-
+    
     private void checkState(CommandPermissions p) throws CommandStateException {
         if (!p.allowedStates.contains(Game.getStatus().getState())) {
             CommandStateException ex = p.disallowedStateExceptions.get(Game.getStatus().getState());
@@ -102,7 +103,7 @@ public abstract class AbstractCommand {
             throw ex;
         }
     }
-
+    
     private void checkPreconditions(CommandPermissions p) throws CommandPreconditionException {
         StringBuilder sb = new StringBuilder(Game.getText("ex_CommandPreconditionNotMet"));
         sb.append('\n');
@@ -124,7 +125,8 @@ public abstract class AbstractCommand {
      * exceptions.
      *
      * @param exceptionHandler - the exception handler to use
-     * @return Information on the successful execution of the command.
+     * @return Information on the successful execution of the command. If no
+     * information is provided, 'null' is returned.
      */
     public CommandFeedback execute(ExceptionHandler exceptionHandler) {
         try {
@@ -146,9 +148,11 @@ public abstract class AbstractCommand {
      * this case is also handled by the feedback handler).
      */
     public CommandFeedback execute(ExceptionHandler exceptionHandler, FeedbackHandler feedbackHandler) {
-        CommandFeedback result = execute(exceptionHandler);
-        feedbackHandler.handleFeedback(result);
-        return result;
+        CommandFeedback feedback = execute(exceptionHandler);
+        if (feedback != null) {
+            feedbackHandler.handleFeedback(feedback);
+        }
+        return feedback;
     }
 
     /**
@@ -158,7 +162,7 @@ public abstract class AbstractCommand {
      * @throws CommandExecuteException - indicates that
      */
     protected abstract CommandFeedback exec() throws CommandExecuteException;
-
+    
     protected static void putStatePermissions(Class commandClass, CommandPermissions p) {
         statePermissions.put(commandClass, p);
     }
