@@ -19,6 +19,8 @@ package nipgm.command;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import nipgm.control.Game;
@@ -27,7 +29,7 @@ import nipgm.data.impl.GameStatus.State;
 /**
  * Base class for commands from the user to the game. Subclasses define concrete
  * commands. Every subclass should define the command state permissions in a
- * static part using 'putStatePermissions(Class commandClass, StatePermissions
+ * static part using 'putStatePermissions(Class commandClass, CommandPermissions
  * p)'.
  *
  * @author Felix Wiemuth
@@ -35,30 +37,57 @@ import nipgm.data.impl.GameStatus.State;
 public abstract class AbstractCommand {
 
     /**
-     * Contains the states in which the command is allowed to be executed and
-     * optional special exceptions to be thrown in special disallowed states.
+     * Contains the states in which the command is allowed to be executed,
+     * optional special exceptions to be thrown in special disallowed states and
+     * preconditions that have to be met to allow the execution.
      */
-    protected static class StatePermissions {
+    protected static class CommandPermissions {
 
         private final Set<State> allowedStates = new HashSet<>();
-        private final Map<State, CommandExecuteException> disallowedStateExceptions = new HashMap<>();
+        private final Map<State, CommandStateException> disallowedStateExceptions = new HashMap<>();
+        private final List<CommandPrecondition> preconditions = new LinkedList<>();
 
-        public StatePermissions(State... allowedStates) {
+        public CommandPermissions(State... allowedStates) {
             this.allowedStates.addAll(Arrays.asList(allowedStates));
         }
 
-        public void putDisallowedStateException(State state, CommandExecuteException ex) {
+        public void putDisallowedStateException(State state, CommandStateException ex) {
             disallowedStateExceptions.put(state, ex);
         }
-    }
-    protected final static Map<Class, StatePermissions> statePermissions = new HashMap<>();
 
-    public CommandFeedback execute() throws CommandExecuteException {
-        StatePermissions p = statePermissions.get(this.getClass());
+        public void addPrecondition(CommandPrecondition precondition) {
+            preconditions.add(precondition);
+        }
+    }
+    private final static Map<Class, CommandPermissions> statePermissions = new HashMap<>();
+
+    /**
+     * Execute the command.
+     *
+     * @return Information on the successful execution of the command.
+     * @throws CommandExecuteException - if something during the execution went
+     * wrong
+     * @throws CommandStateException - if the game is currently in a state not
+     * allowed for this command
+     * @throws CommandPreconditionException - if speicific preconditions for the
+     * execution are not met
+     */
+    public CommandFeedback execute() throws CommandExecuteException, CommandStateException, CommandPreconditionException {
+        CommandPermissions p = statePermissions.get(this.getClass());
+        try {
+            checkState(p);
+            checkPreconditions(p);
+            return exec();
+        } catch (CommandExecuteException ex) { //TODO need to catch CommandStateException?
+            //TODO log exception
+            throw ex;
+        }
+    }
+
+    private void checkState(CommandPermissions p) throws CommandStateException {
         if (!p.allowedStates.contains(Game.getStatus().getState())) {
-            CommandExecuteException ex = p.disallowedStateExceptions.get(Game.getStatus().getState());
-            if (ex == null) {
-                //TODO log exception
+            CommandStateException ex = p.disallowedStateExceptions.get(Game.getStatus().getState());
+            if (ex == null) { //build standard exception text
                 StringBuilder sb = new StringBuilder(Game.getText("ex_CommandNotAllowedInCurrentState$1"));
                 sb.append(Game.getStatus().getStateName());
                 sb.append(Game.getText("ex_CommandNotAllowedInCurrentState$2"));
@@ -68,39 +97,69 @@ public abstract class AbstractCommand {
                     sb.append(Game.getStatus().getStateName(state));
                     sb.append("', ");
                 }
-                ex = new CommandExecuteException(sb.substring(0, sb.length() - 2));
+                ex = new CommandStateException(sb.substring(0, sb.length() - 2));
             }
-            throw ex;
-        }
-        try {
-            return exec();
-        } catch (CommandExecuteException ex) {
-            //TODO log exception
             throw ex;
         }
     }
 
+    private void checkPreconditions(CommandPermissions p) throws CommandPreconditionException {
+        StringBuilder sb = new StringBuilder(Game.getText("ex_CommandPreconditionNotMet"));
+        sb.append('\n');
+        boolean ok = true;
+        for (CommandPrecondition precondition : p.preconditions) {
+            String reason = precondition.check();
+            if (reason != null) {
+                ok = false;
+                sb.append(reason).append('\n');
+            }
+        }
+        if (!ok) {
+            throw new CommandPreconditionException(sb.toString());
+        }
+    }
+
+    /**
+     * Same as 'execute()' with an additional exception handler handling
+     * exceptions.
+     *
+     * @param exceptionHandler - the exception handler to use
+     * @return Information on the successful execution of the command.
+     */
     public CommandFeedback execute(ExceptionHandler exceptionHandler) {
         try {
             return execute();
         } catch (CommandExecuteException ex) {
-            //TODO log exception
             CommandFeedback feedback = new CommandFeedback(ex);
             exceptionHandler.handleException(ex);
             return feedback;
         }
     }
 
-    public CommandFeedback execute(ExceptionHandler exceptionHandler, FeedbackHandler resultHandler) {
-        //TODO log exception
+    /**
+     * Same as 'execute(ExceptionHandler exceptionHandler)' with an additional
+     * feedback handler handling the feedback.
+     *
+     * @param exceptionHandler - the exception handler to use
+     * @param feedbackHandler - the feedback handler to use
+     * @return Information on the successful execution of the command (which in
+     * this case is also handled by the feedback handler).
+     */
+    public CommandFeedback execute(ExceptionHandler exceptionHandler, FeedbackHandler feedbackHandler) {
         CommandFeedback result = execute(exceptionHandler);
-        resultHandler.handleFeedback(result);
+        feedbackHandler.handleFeedback(result);
         return result;
     }
 
+    /**
+     * Carry out the command execution.
+     *
+     * @return Information on the successful execution of the command.
+     * @throws CommandExecuteException - indicates that
+     */
     protected abstract CommandFeedback exec() throws CommandExecuteException;
 
-    protected static void putStatePermissions(Class commandClass, StatePermissions p) {
+    protected static void putStatePermissions(Class commandClass, CommandPermissions p) {
         statePermissions.put(commandClass, p);
     }
 }

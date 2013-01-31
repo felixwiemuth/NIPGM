@@ -17,17 +17,28 @@
 package nipgm.command;
 
 /**
- * Indicates that something went wrong during the actual execution of the
- * command.
+ * Indicates that a command could not be executed because one or more
+ * preconditions (see 'CommandPrecondition') for the command were not met.
  *
  * @author Felix Wiemuth
  */
-public class CommandExecuteException extends Exception {
+public class CommandPreconditionException extends CommandExecuteException {
 
-    public CommandExecuteException() {
+    /**
+     * Creates a new instance of
+     * <code>CommandPreconditionException</code> without detail message.
+     */
+    public CommandPreconditionException() {
     }
 
-    public CommandExecuteException(String message) {
-        super(message);
+    /**
+     * Constructs an instance of
+     * <code>CommandPreconditionException</code> with the specified detail
+     * message.
+     *
+     * @param msg the detail message.
+     */
+    public CommandPreconditionException(String msg) {
+        super(msg);
     }
 }

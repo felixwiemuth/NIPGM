@@ -17,17 +17,15 @@
 package nipgm.command;
 
 /**
- * Indicates that something went wrong during the actual execution of the
- * command.
  *
  * @author Felix Wiemuth
  */
-public class CommandExecuteException extends Exception {
+public interface CommandPrecondition {
 
-    public CommandExecuteException() {
-    }
-
-    public CommandExecuteException(String message) {
-        super(message);
-    }
+    /**
+     *
+     * @return null - check result positive String object - check result
+     * negative, String contains reason
+     */
+    public String check();
 }

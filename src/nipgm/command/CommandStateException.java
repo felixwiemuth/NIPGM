@@ -17,17 +17,25 @@
 package nipgm.command;
 
 /**
- * Indicates that something went wrong during the actual execution of the
- * command.
- *
+ * Indicates that a command could not be executed because it is not allowed in the current state.
  * @author Felix Wiemuth
  */
-public class CommandExecuteException extends Exception {
+public class CommandStateException extends CommandExecuteException {
 
-    public CommandExecuteException() {
+    /**
+     * Creates a new instance of
+     * <code>CommandStateException</code> without detail message.
+     */
+    public CommandStateException() {
     }
 
-    public CommandExecuteException(String message) {
-        super(message);
+    /**
+     * Constructs an instance of
+     * <code>CommandStateException</code> with the specified detail message.
+     *
+     * @param msg the detail message.
+     */
+    public CommandStateException(String msg) {
+        super(msg);
     }
 }
