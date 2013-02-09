@@ -42,19 +42,19 @@ public abstract class AbstractCommand {
      * preconditions that have to be met to allow the execution.
      */
     protected static class CommandPermissions {
-        
+
         private final Set<State> allowedStates = new HashSet<>();
         private final Map<State, CommandStateException> disallowedStateExceptions = new HashMap<>();
         private final List<CommandPrecondition> preconditions = new LinkedList<>();
-        
+
         public CommandPermissions(State... allowedStates) {
             this.allowedStates.addAll(Arrays.asList(allowedStates));
         }
-        
+
         public void putDisallowedStateException(State state, CommandStateException ex) {
             disallowedStateExceptions.put(state, ex);
         }
-        
+
         public void addPrecondition(CommandPrecondition precondition) {
             preconditions.add(precondition);
         }
@@ -84,7 +84,7 @@ public abstract class AbstractCommand {
             throw ex;
         }
     }
-    
+
     private void checkState(CommandPermissions p) throws CommandStateException {
         if (!p.allowedStates.contains(Game.getStatus().getState())) {
             CommandStateException ex = p.disallowedStateExceptions.get(Game.getStatus().getState());
@@ -103,16 +103,17 @@ public abstract class AbstractCommand {
             throw ex;
         }
     }
-    
+
     private void checkPreconditions(CommandPermissions p) throws CommandPreconditionException {
         StringBuilder sb = new StringBuilder(Game.getText("ex_CommandPreconditionNotMet"));
         sb.append('\n');
         boolean ok = true;
         for (CommandPrecondition precondition : p.preconditions) {
-            String reason = precondition.check();
-            if (reason != null) {
+            if (!precondition.check()) {
                 ok = false;
-                sb.append(reason).append('\n');
+                sb.append(precondition.getName()).append(": ")
+                        .append(Game.getText("cmdP_" + precondition.getName()))
+                        .append("\n");
             }
         }
         if (!ok) {
@@ -162,7 +163,7 @@ public abstract class AbstractCommand {
      * @throws CommandExecuteException - indicates that
      */
     protected abstract CommandFeedback exec() throws CommandExecuteException;
-    
+
     protected static void putStatePermissions(Class commandClass, CommandPermissions p) {
         statePermissions.put(commandClass, p);
     }

@@ -22,10 +22,18 @@ package nipgm.command;
  */
 public interface CommandPrecondition {
 
+
     /**
-     *
-     * @return null - check result positive String object - check result
-     * negative, String contains reason
+     * Check if the precondition is met.
+     * @return true if the precondition is met
      */
-    public String check();
+    public boolean check();
+
+    /**
+     * Get the name of the precondition which is used to obtain a description
+     * form the translation file.
+     *
+     * @return the name of the precondition
+     */
+    public String getName();
 }
