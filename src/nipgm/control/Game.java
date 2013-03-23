@@ -19,6 +19,7 @@ package nipgm.control;
 import java.io.File;
 import nipgm.data.impl.GameConfiguration;
 import nipgm.data.impl.GameStatus;
+import nipgm.database.DatabaseService;
 import nipgm.translations.Translator;
 
 /**
@@ -32,6 +33,7 @@ public class Game {
     private Translator translator = new Translator(new File(jarDirectory, "translations"));
     private GameConfiguration config = new GameConfiguration();
     private GameStatus status = new GameStatus();
+    //private DatabaseService dbservice = new DatabaseService();
 
     private Game() {
         //TODO load translation from prereferences
@@ -48,6 +50,10 @@ public class Game {
 
     public static String getText(String key) {
         return instance.translator.get(key);
+    }
+    
+    public static String getFormattedText(String key, Object... args) {
+        return String.format(instance.translator.get(key), args);
     }
 
     public static GameConfiguration getConfig() {
