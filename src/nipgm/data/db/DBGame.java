@@ -14,40 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package nipgm.data.impl;
-
-import nipgm.data.Player;
-import nipgm.data.db.DBPlayer;
+package nipgm.data.db;
 
 /**
  *
  * @author Felix Wiemuth
  */
-public class GamePlayer implements Player {
+public class DBGame {
 
-    private final DBPlayer dbplayer;
-    private int credits = 0;
+    private int id;
 
-    public GamePlayer(DBPlayer dbplayer) {
-        this.dbplayer = dbplayer;
-    }
-
-    /**
-     * Add credits to the players account.
-     *
-     * @param credits Amount of credits to add.
-     */
-    public void addCredits(int credits) {
-        this.credits += credits;
-    }
-
-    @Override
-    public String getName() {
-        return dbplayer.getName();
-    }
-
-    @Override
-    public int getCredits() {
-        return credits;
+    public int getId() {
+        return id;
     }
 }
