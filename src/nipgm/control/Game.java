@@ -28,6 +28,7 @@ import nipgm.translations.Translator;
  */
 public class Game {
 
+    public static final String version = "0.x.x Alpha";
     private static Game instance = new Game();
     private static File jarDirectory = new File(Game.class.getProtectionDomain().getCodeSource().getLocation().getPath());
     private Translator translator = new Translator(new File(jarDirectory, "translations"));
@@ -51,7 +52,7 @@ public class Game {
     public static String getText(String key) {
         return instance.translator.get(key);
     }
-    
+
     public static String getFormattedText(String key, Object... args) {
         return String.format(instance.translator.get(key), args);
     }
