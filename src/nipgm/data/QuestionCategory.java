@@ -17,32 +17,35 @@
 package nipgm.data;
 
 /**
- * A representation of one question of the game. It consists of the actual
- * question, a question type (arbitrary String) and the correct answer.
+ * A category type for hierarchical arrangement of questions.
  *
  * @author Felix Wiemuth
  */
-public class Question {
+public class QuestionCategory {
 
-    private String question;
-    private QuestionCategory category;
-    private Answer answer;
+    private int id;
+    private String name;
+    private String description;
+    private Integer parentCat; //null: no parent category
 
-    public Question(String question, QuestionCategory category, String answer) {
-        this.question = question;
-        this.category = category;
-        this.answer = new Answer(answer);
+    public QuestionCategory() {
     }
 
-    public Answer getAnswer() {
-        return answer;
+    public QuestionCategory(String name, String description, Integer parentCat) {
+        this.name = name;
+        this.description = description;
+        this.parentCat = parentCat;
     }
 
-    public String getText() {
-        return question;
+    public int getID() {
+        return id;
     }
 
-    public QuestionCategory getCategory() {
-        return category;
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

@@ -16,6 +16,7 @@
  */
 package nipgm.data.impl;
 
+import nipgm.data.QuestionCategory;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,9 +33,9 @@ public class GameConfiguration {
         GOT_PLAYERS_VOTE;
     }
     private Map<AwardType, Integer> baseCredits = new HashMap<>();
-    private Map<String, Integer> questionTypeFactor = new HashMap<>();
+    private Map<QuestionCategory, Integer> questionTypeFactor = new HashMap<>();
 
-    public int getCreditAmount(AwardType awardType, String questionType) {
+    public int getCreditAmount(AwardType awardType, QuestionCategory questionType) {
         return baseCredits.get(awardType) * questionTypeFactor.get(questionType);
     }
 }

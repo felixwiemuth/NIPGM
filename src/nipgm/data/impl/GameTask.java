@@ -141,14 +141,14 @@ public class GameTask implements Task {
         for (GameAnswerItem answer : answers) {
             //calculate credits for players who got votes from other players
             int credits = answer.getVoteCount()
-                    * Game.getConfig().getCreditAmount(GameConfiguration.AwardType.GOT_PLAYERS_VOTE, question.getType());
+                    * Game.getConfig().getCreditAmount(GameConfiguration.AwardType.GOT_PLAYERS_VOTE, question.getCategory());
             for (GamePlayer author : answer.getAuthors()) {
                 playerStatus.get(author).addCredits(credits);
             }
             //calculate credits for players who voted the correct answer
             if (answer.isCorrect()) {
                 for (GamePlayer player : answer.getVotes()) {
-                    playerStatus.get(player).addCredits(Game.getConfig().getCreditAmount(GameConfiguration.AwardType.VOTED_CORRECT_ANSWER, question.getType()));
+                    playerStatus.get(player).addCredits(Game.getConfig().getCreditAmount(GameConfiguration.AwardType.VOTED_CORRECT_ANSWER, question.getCategory()));
                 }
             }
         }
