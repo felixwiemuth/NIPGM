@@ -158,9 +158,8 @@ public class DatabaseUtil {
     }
 
     /**
-     * Formats details of an SQLException chain as
-     * <code>String</code>. Details included are SQL State, Error code,
-     * Exception message.
+     * Formats details of an SQLException chain as <code>String</code>. Details
+     * included are SQL State, Error code, Exception message.
      *
      * @param e the SQLException from which to get details.
      */

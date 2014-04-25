@@ -22,9 +22,9 @@ package nipgm.command;
  */
 public interface CommandPrecondition {
 
-
     /**
      * Check if the precondition is met.
+     *
      * @return true if the precondition is met
      */
     public boolean check();

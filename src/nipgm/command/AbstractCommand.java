@@ -101,8 +101,8 @@ public abstract class AbstractCommand {
                 }
                 ex = new CommandStateException(
                         Game.getFormattedText("ex_CommandNotAllowedInCurrentState",
-                        Game.getStatus().getStateName(),
-                        sb.toString()));
+                                Game.getStatus().getStateName(),
+                                sb.toString()));
             }
             throw ex;
         }

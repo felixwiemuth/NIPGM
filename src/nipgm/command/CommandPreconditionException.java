@@ -25,16 +25,15 @@ package nipgm.command;
 public class CommandPreconditionException extends CommandExecuteException {
 
     /**
-     * Creates a new instance of
-     * <code>CommandPreconditionException</code> without detail message.
+     * Creates a new instance of <code>CommandPreconditionException</code>
+     * without detail message.
      */
     public CommandPreconditionException() {
     }
 
     /**
-     * Constructs an instance of
-     * <code>CommandPreconditionException</code> with the specified detail
-     * message.
+     * Constructs an instance of <code>CommandPreconditionException</code> with
+     * the specified detail message.
      *
      * @param msg the detail message.
      */
