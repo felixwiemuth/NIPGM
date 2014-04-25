@@ -70,7 +70,7 @@ public abstract class AbstractCommand {
      * wrong
      * @throws CommandStateException - if the game is currently in a state not
      * allowed for this command
-     * @throws CommandPreconditionException - if speicific preconditions for the
+     * @throws CommandPreconditionException - if specific preconditions for the
      * execution are not met
      */
     public CommandFeedback execute() throws CommandExecuteException, CommandStateException, CommandPreconditionException {
@@ -95,7 +95,7 @@ public abstract class AbstractCommand {
                     sb.append(Game.getStatus().getStateName(state));
                     sb.append("', ");
                 }
-                //delete last seperator
+                //delete last separator
                 if (sb.length() >= 2) {
                     sb.delete(sb.length() - 2, sb.length());
                 }
