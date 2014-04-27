@@ -13,6 +13,8 @@ create table categories(
     foreign key(parentCat) references categories(id) -- null values are OK!
 );
 
+insert into categories(name, description, parentCat) values ('Root', 'This is a dummy root category. All other categories are direct or indirect children of this category.', null);
+
 create table questions(
     id int primary key GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
     question varchar(100) not null,

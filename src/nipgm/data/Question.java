@@ -25,9 +25,9 @@ package nipgm.data;
  */
 public class Question {
 
-    private String question;
-    private QuestionCategory category;
-    private Answer answer;
+    private final String question;
+    private final QuestionCategory category;
+    private final Answer answer;
 
     public Question(String question, QuestionCategory category, String answer) {
         this.question = question;

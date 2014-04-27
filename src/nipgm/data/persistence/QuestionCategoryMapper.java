@@ -17,7 +17,7 @@
 package nipgm.data.persistence;
 
 import java.util.List;
-import nipgm.data.QuestionCategory;
+import nipgm.data.db.DBQuestionCategory;
 
 /**
  *
@@ -25,7 +25,7 @@ import nipgm.data.QuestionCategory;
  */
 public interface QuestionCategoryMapper {
 
-    public List<QuestionCategory> selectAllCategories();
+    public List<DBQuestionCategory> selectAllCategories();
 
-    public void insertCategory(QuestionCategory category);
+    public void insertCategory(DBQuestionCategory category);
 }

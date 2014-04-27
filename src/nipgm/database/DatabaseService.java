@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Felix Wiemuth
+ * Copyright (C) 2013 - 2014 Felix Wiemuth
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,15 +26,21 @@ import java.io.Reader;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import nipgm.control.Game;
 import nipgm.data.Question;
-import nipgm.data.db.DBPlayer;
-import nipgm.data.db.DBQuestion;
 import nipgm.data.QuestionCategory;
 import nipgm.data.db.DBGame;
+import nipgm.data.db.DBPlayer;
+import nipgm.data.db.DBQuestion;
+import nipgm.data.db.DBQuestionCategory;
 import nipgm.data.impl.GamePlayer;
+import nipgm.data.impl.GameQuestionCategory;
 import nipgm.data.persistence.PlayerMapper;
 import nipgm.data.persistence.QuestionCategoryMapper;
 import nipgm.data.persistence.QuestionMapper;
@@ -47,7 +53,13 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 /**
  * The database service provides an interface to the database. It allows to
- * obtain objects from and write objects to the database.
+ * obtain objects from and write objects to the database. It throws different
+ * exceptions when errors occur:
+ * <ul>
+ * <li><code>IllegalArgumentException</code>
+ * </ul>
+ * The excpetion message contains information about the reason of the problem
+ * and, where appropriate, which parameters are concerned.
  *
  * @author Felix Wiemuth
  */
@@ -71,7 +83,9 @@ public class DatabaseService {
     private final File database;
     private SqlSessionFactory sqlSessionFactory;
     //Important to store categories here: always use the same objects for one category entry of the DB
-    private HashMap<Integer, QuestionCategory> categories = new HashMap<>();
+    private HashMap<Integer, GameQuestionCategory> questionCategoriesMap; //used for
+//    private QuestionCategoryTreeNode categoryTree;
+    private GameQuestionCategory rootCategory;
 
     /**
      * Create a new database service. Note: The database must already be
@@ -138,27 +152,91 @@ public class DatabaseService {
     }
 
     private void loadCategories() {
+        Set<DBQuestionCategory> dbQuestionCategories;
+        Set<GameQuestionCategory> questionCategories = new HashSet<>();
+        Map<GameQuestionCategory, Integer> parentIDs = new HashMap<>();
+        questionCategoriesMap = new HashMap<>();
         try (SqlSession session = sqlSessionFactory.openSession()) {
             QuestionCategoryMapper mapper = session.getMapper(QuestionCategoryMapper.class);
-            categories = new HashMap<>();
-            for (QuestionCategory c : mapper.selectAllCategories()) {
-                categories.put(c.getID(), c);
+            dbQuestionCategories = new HashSet<>(mapper.selectAllCategories()); //TODO directly get as set from myBatis
+        }
+
+        Set<GameQuestionCategory> questionCategoriesUnattached = new HashSet<>(); //the nodes where to find a parent for (initialized with all categories but the root category)
+
+        //convert to GameQuestionCategory
+        for (DBQuestionCategory dbCategory : dbQuestionCategories) {
+            GameQuestionCategory category = new GameQuestionCategory(dbCategory);
+            questionCategories.add(category);
+            questionCategoriesMap.put(category.getID(), category);
+            if (dbCategory.getParentCat() == null) { //found root
+                rootCategory = category;
+            } else {
+                questionCategoriesUnattached.add(category);
             }
+            parentIDs.put(category, dbCategory.getParentCat());
+        }
+
+        //build tree
+        int size;
+        do { //while the size of unattached categories shrinks, try to attach
+            size = questionCategoriesUnattached.size();
+            for (Iterator<GameQuestionCategory> it = questionCategoriesUnattached.iterator(); it.hasNext();) {
+                GameQuestionCategory node = it.next();
+                Integer nodeParent = parentIDs.get(node);
+                for (GameQuestionCategory parent : questionCategories) {
+                    if (parent.getID() == nodeParent) {
+                        parent.addChildCategory(node);
+                        it.remove();
+                        break; //continue with next node without parent
+                    }
+                }
+            }
+        } while (size > questionCategoriesUnattached.size());
+
+        //now all non-root nodes should be attached
+        if (size != 0) {
+            throw new IllegalStateException("The category data in the database is corrupted or there is a bug in the software.");
+        }
+        if (rootCategory == null) {
+            throw new IllegalStateException("Corrupted database: no root category was found.");
         }
     }
 
-    public QuestionCategory createQuestionCategory(String name, String description, Integer parentCat) {
+    /**
+     * Create a new 'QuestionCategory'.
+     *
+     * @param name
+     * @param description
+     * @param parentCategory the parent category (required, there is only one
+     * default root category)
+     * @return
+     */
+    public QuestionCategory createQuestionCategory(String name, String description, QuestionCategory parentCategory) {
+        checkNotNull(parentCategory, "parentCategory");
         try (SqlSession session = sqlSessionFactory.openSession()) {
             QuestionCategoryMapper mapper = session.getMapper(QuestionCategoryMapper.class);
-            QuestionCategory category = new QuestionCategory(name, description, parentCat);
-            mapper.insertCategory(category);
+            DBQuestionCategory dbcategory = new DBQuestionCategory(name, description, parentCategory.getID());
+            mapper.insertCategory(dbcategory);
             session.commit();
-            categories.put(category.getID(), category);
+            GameQuestionCategory category = new GameQuestionCategory(dbcategory);
+            questionCategoriesMap.put(category.getID(), category);
+            questionCategoriesMap.get(dbcategory.getParentCat()).addChildCategory(category); //insert into category tree
             return category;
         }
     }
 
-    public List<QuestionCategory> getAllCategories() {
+    /**
+     * Get the root category. This gives access to the whole category tree which
+     * was loaded on construction. All changes to the category tree done over
+     * this class' interface are also reflected in the tree obtained.
+     *
+     * @return
+     */
+    public QuestionCategory getRootCategory() {
+        return rootCategory;
+    }
+
+    private List<DBQuestionCategory> getAllCategories() {
         try (SqlSession session = sqlSessionFactory.openSession()) {
             QuestionCategoryMapper mapper = session.getMapper(QuestionCategoryMapper.class);
             return mapper.selectAllCategories();
@@ -173,7 +251,7 @@ public class DatabaseService {
                 throw new ObjectNotFoundException(Game.getFormattedText("ex_questionNotFound", id));
             }
             return new Question(dbquestion.getQuestion(),
-                    categories.get(dbquestion.getCatID()),
+                    questionCategoriesMap.get(dbquestion.getCatID()),
                     dbquestion.getAnswer());
         }
     }
@@ -234,6 +312,12 @@ public class DatabaseService {
             DBMapper mapper = session.getMapper(DBMapper.class);
             mapper.insertProperty("application_version", Game.version);
             session.commit();
+        }
+    }
+
+    private void checkNotNull(Object o, String parameterName) throws IllegalArgumentException {
+        if (o == null) {
+            throw new IllegalArgumentException(String.format("Cannot perform database operation: parameter '%s' must not be null!", parameterName));
         }
     }
 }

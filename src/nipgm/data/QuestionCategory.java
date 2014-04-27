@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Felix Wiemuth
+ * Copyright (C) 2014 Felix Wiemuth
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,36 +16,20 @@
  */
 package nipgm.data;
 
+import java.util.List;
+
 /**
  * A category type for hierarchical arrangement of questions.
  *
  * @author Felix Wiemuth
  */
-public class QuestionCategory {
+public interface QuestionCategory {
 
-    private int id;
-    private String name;
-    private String description;
-    private Integer parentCat; //null: no parent category
+    List<? extends QuestionCategory> getChildCategories();
 
-    public QuestionCategory() {
-    }
+    String getDescription();
 
-    public QuestionCategory(String name, String description, Integer parentCat) {
-        this.name = name;
-        this.description = description;
-        this.parentCat = parentCat;
-    }
+    int getID();
 
-    public int getID() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
+    String getName();
 }

@@ -21,11 +21,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace='nipgm.data.persistence.QuestionCategoryMapper'>
     
-    <select id="selectAllCategories" resultType="nipgm.data.QuestionCategory">
+    <select id="selectAllCategories" resultType="nipgm.data.db.DBQuestionCategory">
         select id, name, description, parentCat from categories
     </select>
     
-    <insert id="insertCategory" parameterType="nipgm.data.QuestionCategory" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertCategory" parameterType="nipgm.data.db.DBQuestionCategory" useGeneratedKeys="true" keyProperty="id">
         insert into categories(name, description, parentCat) values(#{name}, #{description}, #{parentCat,javaType=int,jdbcType=NUMERIC})
     </insert>
     

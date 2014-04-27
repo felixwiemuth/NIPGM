@@ -14,28 +14,42 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package nipgm.data.impl;
-
-import java.util.HashMap;
-import java.util.Map;
-import nipgm.data.QuestionCategory;
+package nipgm.data.db;
 
 /**
- * Includes everything configurable.
+ * A category type for hierarchical arrangement of questions.
  *
  * @author Felix Wiemuth
  */
-public class GameConfiguration {
+public class DBQuestionCategory {
 
-    public enum AwardType {
+    private int id;
+    private String name;
+    private String description;
+    private Integer parentCat; //null: no parent category
 
-        VOTED_CORRECT_ANSWER,
-        GOT_PLAYERS_VOTE;
+    public DBQuestionCategory() {
     }
-    private Map<AwardType, Integer> baseCredits = new HashMap<>();
-    private Map<QuestionCategory, Integer> questionTypeFactor = new HashMap<>();
 
-    public int getCreditAmount(AwardType awardType, QuestionCategory questionType) {
-        return baseCredits.get(awardType) * questionTypeFactor.get(questionType);
+    public DBQuestionCategory(String name, String description, Integer parentCat) {
+        this.name = name;
+        this.description = description;
+        this.parentCat = parentCat;
+    }
+
+    public int getID() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Integer getParentCat() {
+        return parentCat;
     }
 }
