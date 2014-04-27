@@ -26,8 +26,8 @@ import nipgm.data.Question;
 import nipgm.data.Task;
 
 /**
- * A 'GameTask' represents the data used for one round. This includes question,
- * players, answers etc.
+ * A <code>GameTask</code> represents the data used for one round. This includes
+ * question, players, answers etc.
  *
  * @author Felix Wiemuth
  */

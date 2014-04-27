@@ -24,7 +24,8 @@ public interface Texts {
 
     /**
      * Get the text from the currently loaded translation corresponding to
-     * 'key'. If there is no text belonging to 'key', "NULL" is returned.
+     * <code>key</code>. If there is no text belonging to <code>key</code>,
+     * <code>null</code> is returned.
      *
      * @param key
      * @return

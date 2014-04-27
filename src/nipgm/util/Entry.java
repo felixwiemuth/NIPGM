@@ -20,6 +20,8 @@ package nipgm.util;
  * An entry for a mapping from game data structures to database data structures.
  *
  * @author Felix Wiemuth
+ * @param <GameType>
+ * @param <DBType>
  */
 public class Entry<GameType, DBType> {
 

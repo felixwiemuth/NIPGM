@@ -89,7 +89,7 @@ public class DatabaseService {
 
     /**
      * Create a new database service. Note: The database must already be
-     * initialized by calling static method 'initDB()'.
+     * initialized by calling static method <code>initDB()</code>.
      *
      * @param database
      * @param username
@@ -137,9 +137,10 @@ public class DatabaseService {
     }
 
     /**
-     * Saves a new player with name 'name' to the database.
+     * Saves a new player to the database.
      *
-     * @param name
+     * @param name the name of the player to be created
+     * @return
      */
     public GamePlayer createPlayer(String name) {
         DBPlayer dbplayer = new DBPlayer(name);
@@ -203,7 +204,7 @@ public class DatabaseService {
     }
 
     /**
-     * Create a new 'QuestionCategory'.
+     * Create a new <code>QuestionCategory</code>.
      *
      * @param name
      * @param description

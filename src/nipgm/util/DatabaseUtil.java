@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import static nipgm.util.Util.*;
+import static nipgm.util.Util.err;
 
 /**
  * Utility methods for general database operations.
@@ -59,6 +59,11 @@ public class DatabaseUtil {
      * Get a connection to the database (embedded), configured the way it is
      * needed for this application. If the connetion fails, everything is closed
      * again automatically.
+     *
+     * @param database
+     * @param create
+     * @return
+     * @throws nipgm.util.DatabaseUtil.ConnectException
      */
     public static Connection getConnection(File database, boolean create) throws ConnectException {
         Connection conn = null;
@@ -97,7 +102,7 @@ public class DatabaseUtil {
     /**
      * Shutdown the database.
      *
-     * @param conn
+     * @return
      */
     public static boolean shutDownDatabase() {
         try {
@@ -162,6 +167,7 @@ public class DatabaseUtil {
      * included are SQL State, Error code, Exception message.
      *
      * @param e the SQLException from which to get details.
+     * @return
      */
     public static String formatSQLException(SQLException e) {
         // Unwraps the entire exception chain to unveil the real cause of the

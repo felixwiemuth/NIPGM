@@ -29,8 +29,8 @@ import nipgm.data.impl.GameStatus.State;
 /**
  * Base class for commands from the user to the game. Subclasses define concrete
  * commands. Every subclass should define the command state permissions in a
- * static part using 'putStatePermissions(Class commandClass, CommandPermissions
- * p)'.
+ * static part using <code>putStatePermissions(Class commandClass, CommandPermissions
+ * p)</code>.
  *
  * @author Felix Wiemuth
  */
@@ -65,7 +65,7 @@ public abstract class AbstractCommand {
      * Execute the command.
      *
      * @return Information on the successful execution of the command. If no
-     * information is provided, 'null' is returned.
+     * information is provided, <code>null</code> is returned.
      * @throws CommandExecuteException - if something during the execution went
      * wrong
      * @throws CommandStateException - if the game is currently in a state not
@@ -126,12 +126,12 @@ public abstract class AbstractCommand {
     }
 
     /**
-     * Same as 'execute()' with an additional exception handler handling
-     * exceptions.
+     * Same as <code>execute()</code> with an additional exception handler
+     * handling exceptions.
      *
      * @param exceptionHandler - the exception handler to use
      * @return Information on the successful execution of the command. If no
-     * information is provided, 'null' is returned.
+     * information is provided, <code>null</code> is returned.
      */
     public CommandFeedback execute(ExceptionHandler exceptionHandler) {
         try {
@@ -144,8 +144,8 @@ public abstract class AbstractCommand {
     }
 
     /**
-     * Same as 'execute(ExceptionHandler exceptionHandler)' with an additional
-     * feedback handler handling the feedback.
+     * Same as <code>execute(ExceptionHandler exceptionHandler)</code> with an
+     * additional feedback handler handling the feedback.
      *
      * @param exceptionHandler - the exception handler to use
      * @param feedbackHandler - the feedback handler to use

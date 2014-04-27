@@ -22,7 +22,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import static nipgm.util.Util.*;
+import static nipgm.util.Util.err;
+import static nipgm.util.Util.getReader;
+import static nipgm.util.Util.warn;
 
 /**
  * Provide text strings for the application from a selected translation file.
@@ -57,7 +59,7 @@ public class Translator implements Texts {
     }
 
     /**
-     * Load the texts of the translation file 'file'.
+     * Load the texts of the translation file <code>file</code>.
      *
      * @param file
      */
@@ -128,7 +130,8 @@ public class Translator implements Texts {
 
     /**
      * Get the text from the currently loaded translation corresponding to
-     * 'key'. If there is no text belonging to 'key', "NULL" is returned.
+     * <code>key</code>. If there is no text belonging to <code>key</code>,
+     * <code>NULL</code> is returned.
      *
      * @param key
      * @return

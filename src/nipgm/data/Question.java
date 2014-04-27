@@ -18,8 +18,8 @@ package nipgm.data;
 
 /**
  * A representation of one question of the game. It consists of the actual
- * question, a question category (see 'QuestionCategory') and the correct
- * answer.
+ * question, a question category (see <code>QuestionCategory</code>) and the
+ * correct answer.
  *
  * @author Felix Wiemuth
  */

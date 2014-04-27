@@ -18,7 +18,8 @@ package nipgm.command;
 
 /**
  * Indicates that a command could not be executed because one or more
- * preconditions (see 'CommandPrecondition') for the command were not met.
+ * preconditions (see <code>CommandPrecondition</code>) for the command were not
+ * met.
  *
  * @author Felix Wiemuth
  */
